@@ -17,8 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from musicians import views
+from musicians.views import page_not_found
+
+handler404 = page_not_found
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('musicians.urls')),  # http://127.0.0.1:8000/
 ]
+
+
