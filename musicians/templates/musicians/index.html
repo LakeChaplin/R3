@@ -1,23 +1,31 @@
 {% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock title %}
+
 {% block content %}
-<h1>{{ title }}</h1>
+<h1 class="mt-4 mb-3">{{ title }}</h1>
 {% include 'musicians/includes/nav.html' %}
 
-<ul>
+<div class="list-group">
     {% for person in posts %}
     {% if person.is_published %}
-    <li>
-        <h2>{{ person.title }}</h2>
-        <p>{{ person.content }}</p>
-        <p><a href="{% url 'post' person.id %}">read article</a></p>
-        {% if not forloop.last %}
-        <hr>
-        {% endif %}
-    </li>
+    <div class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h2 class="mb-1">{{ person.title }}</h2>
+            <small class="text-muted">3 days ago</small>
+        </div>
+        {% autoescape off %}
+        <p class="mb-1">{{ person.content|truncatewords:150|linebreaks}}</p>
+        {% endautoescape %}
+        <a href="{% url 'post' person.id %}" class="btn btn-primary">Read article</a>
+    </div>
+    {% if not forloop.last %}
+    <hr>
+    {% endif %}
     {% endif %}
     {% endfor %}
-</ul>
+</div>
 
 {% include 'musicians/includes/nav.html' %}
 {% endblock %}
+
 

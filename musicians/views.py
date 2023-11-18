@@ -5,6 +5,13 @@ from django.template.defaultfilters import join
 from django.template.loader import render_to_string
 from django.urls import reverse
 
+
+def read_text(path: str) -> str:
+    with open(path, 'r') as f:
+        obj = f.read().strip()
+    return obj
+
+
 menu = [{'title': "About", 'url_name': 'about'},
         {'title': "Create new article", 'url_name': 'add_article'},
         {'title': "Contact us", 'url_name': 'contact'},
@@ -12,9 +19,9 @@ menu = [{'title': "About", 'url_name': 'about'},
         ]
 
 data_db = [
-    {'id': 1, 'title': 'Dj Orekh', 'content': 'Biography dj Orekh', 'is_published': True},
-    {'id': 2, 'title': 'Dj SpaceRiksha', 'content': 'Biography SpaceRiksha', 'is_published': False },
-    {'id': 3, 'title': 'MC Cherdak', 'content': 'Biography MC Cherdak', 'is_published': True},
+    {'id': 1, 'title': 'Fatboy Slim', 'content': read_text('musicians/temp_info_dir/fatboy.txt'), 'is_published': True},
+    {'id': 2, 'title': 'Dirtyphonics', 'content': read_text('musicians/temp_info_dir/dirty.txt'), 'is_published': True},
+    {'id': 3, 'title': 'Moby', 'content': read_text('musicians/temp_info_dir/moby.txt'), 'is_published': True},
 ]
 
 
