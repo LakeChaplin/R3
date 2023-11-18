@@ -1,39 +1,55 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 from datetime import datetime
-
+from django.template.defaultfilters import join
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-menu = ['About', 'Create new article', 'Contact us', 'Log in/Sing up']
+menu = [{'title': "About", 'url_name': 'about'},
+        {'title': "Create new article", 'url_name': 'add_article'},
+        {'title': "Contact us", 'url_name': 'contact'},
+        {'title': "Log in/Sing up", 'url_name': 'login'}
+        ]
+
+data_db = [
+    {'id': 1, 'title': 'Dj Orekh', 'content': 'Biography dj Orekh', 'is_published': True},
+    {'id': 2, 'title': 'Dj SpaceRiksha', 'content': 'Biography SpaceRiksha', 'is_published': False },
+    {'id': 3, 'title': 'MC Cherdak', 'content': 'Biography MC Cherdak', 'is_published': True},
+]
 
 
 def index(request):  # HttpRequest
     data = {
         'title': 'Main page',
         'menu': menu,
+        'posts': data_db,
     }
     template = render_to_string('musicians/index.html', context=data)
     return HttpResponse(template)
 
 
 def about(request):
-    data = {
-        'title': 'About us'
-    }
-    return render(request, 'musicians/about.html', context=data)
+    return render(request, 'musicians/about.html', {'title': 'About site', 'menu': menu})
+
+
+def contact(request):
+    return HttpResponse('Contact us page')
+
+
+def login(request):
+    return HttpResponse('Log in/ Sing up page (authorisation)')
+
+
+def add_article(request):
+    return HttpResponse('Page for create new article')
 
 
 def events(request):
     return HttpResponse('<h1> Events preview and photos</h1>')
 
 
-def categories_id(request, cat_id):
-    return HttpResponse(f'<h1>Categories</h1><p>category_id: {cat_id}</p>')
-
-
-def categories(request, cat_slug):
-    return HttpResponse(f'<h1>Categories</h1><p>category_by_slug: {cat_slug}</p>')
+def show_post(request, post_id):
+    return HttpResponse(f'article with id = {post_id}')
 
 
 def archive(request, year):
