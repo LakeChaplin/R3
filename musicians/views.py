@@ -24,15 +24,22 @@ data_db = [
     {'id': 3, 'title': 'Moby', 'content': read_text('musicians/temp_info_dir/moby.txt'), 'is_published': True},
 ]
 
+cats_db = [
+    {'id': 1, 'name': "drum and bass"},
+    {'id': 2, 'name': 'psychedelic'},
+    {'id': 3, 'name': 'progressive'},
+]
+
 
 def index(request):  # HttpRequest
     data = {
-        'title': 'Main page',
+        'title': 'Legends of electronic music',
         'menu': menu,
         'posts': data_db,
+        'cat_selected': 0,
     }
-    template = render_to_string('musicians/index.html', context=data)
-    return HttpResponse(template)
+
+    return render(request, 'musicians/index.html', context=data)
 
 
 def about(request):
@@ -64,6 +71,17 @@ def archive(request, year):
         uri = reverse('events')
         return redirect(uri)
     return HttpResponse(f'<h1>Events Archive</h1><p>Year: {year}</p>')
+
+
+def show_category(request, cat_id):
+    data = {
+        'title': 'Legends of electronic music',
+        'menu': menu,
+        'posts': data_db,
+        'cat_selected': cat_id,
+    }
+
+    return render(request, 'musicians/index.html', context=data)
 
 
 def page_not_found(request, exception):
