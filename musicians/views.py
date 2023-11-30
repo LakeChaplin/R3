@@ -1,9 +1,10 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from django.template.defaultfilters import join
 from django.template.loader import render_to_string
 from django.urls import reverse
+from .models import *
 
 
 def read_text(path: str) -> str:
@@ -18,24 +19,13 @@ menu = [{'title': "About", 'url_name': 'about'},
         {'title': "Log in/Sing up", 'url_name': 'login'}
         ]
 
-data_db = [
-    {'id': 1, 'title': 'Fatboy Slim', 'content': read_text('musicians/temp_info_dir/fatboy.txt'), 'is_published': True},
-    {'id': 2, 'title': 'Dirtyphonics', 'content': read_text('musicians/temp_info_dir/dirty.txt'), 'is_published': True},
-    {'id': 3, 'title': 'Moby', 'content': read_text('musicians/temp_info_dir/moby.txt'), 'is_published': True},
-]
-
-cats_db = [
-    {'id': 1, 'name': "drum and bass"},
-    {'id': 2, 'name': 'psychedelic'},
-    {'id': 3, 'name': 'progressive'},
-]
-
 
 def index(request):  # HttpRequest
+    posts = Musicians.published.all()
     data = {
         'title': 'Legends of electronic music',
         'menu': menu,
-        'posts': data_db,
+        'posts': posts,
         'cat_selected': 0,
     }
 
@@ -62,8 +52,15 @@ def events(request):
     return HttpResponse('<h1> Events preview and photos</h1>')
 
 
-def show_post(request, post_id):
-    return HttpResponse(f'article with id = {post_id}')
+def show_post(request, post_slug):
+    post = get_object_or_404(Musicians, slug=post_slug)
+    data = {
+        'title': post.title,
+        'menu': menu,
+        'post': post,
+        'cat_selected': 1,
+    }
+    return render(request, 'musicians/post.html', context=data)
 
 
 def archive(request, year):
@@ -73,12 +70,14 @@ def archive(request, year):
     return HttpResponse(f'<h1>Events Archive</h1><p>Year: {year}</p>')
 
 
-def show_category(request, cat_id):
+def show_category(request, cat_slug):
+    category = get_object_or_404(Categories, slug=cat_slug)
+    posts = Musicians.published.filter(category_id=category.pk)
     data = {
-        'title': 'Legends of electronic music',
+        'title': f'Legends of {category.name} music',
         'menu': menu,
-        'posts': data_db,
-        'cat_selected': cat_id,
+        'posts': posts,
+        'cat_selected': category.pk,
     }
 
     return render(request, 'musicians/index.html', context=data)

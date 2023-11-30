@@ -18,13 +18,26 @@
 }
 
 body {
-    background-image: url('/static/musicians/images/abstract-neon-lights-background.jpg');
+    /*background-image: url('/static/musicians/images/abstract-neon-lights-background.jpg');*/
     background-size: cover; /* Покрытие всего экрана изображением */
     background-position: center center; /* Центрирование изображения */
     background-repeat: no-repeat; /* Изображение не будет повторяться */
     background-attachment: fixed; /* Изображение останется неподвижным при прокрутке */
     color: #ffffff; /* Установка белого цвета текста для контраста с темным фоном */
 }
+
+#video-background {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100; /* Убедитесь, что видео находится под всеми другими элементами */
+    overflow: hidden;
+}
+
 
 
 

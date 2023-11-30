@@ -2,6 +2,6 @@
     {% if cat.id == cat_selected %}
         <span class="selected">{{ cat.name }}</span>
     {% else %}
-        <a href="{% url 'category' cat.id %}">{{ cat.name }}</a>
+        <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
     {% endif %}
 {% endfor %}
